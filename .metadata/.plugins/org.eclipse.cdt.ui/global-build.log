@@ -1,0 +1,95 @@
+16:13:59 **** Incremental Build of configuration Debug for project ASSIGNMENT_FINAL ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'send_data':
+../Core/Src/main.c:153:41: warning: '  #
+
+' directive writing 5 bytes into a region of size between 0 and 4 [-Wformat-overflow=]
+  153 |  HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp : %d, humi: %d, lux: %d  #\n\r",temp,humi,lux ), 1000);
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:153:41: note: 'sprintf' output between 32 and 62 bytes into a destination of size 30
+arm-none-eabi-gcc -o "ASSIGNMENT_FINAL.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\IOT2023\iot_2023\ASSIGNMENT_FINAL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ASSIGNMENT_FINAL.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ASSIGNMENT_FINAL.elf
+ 
+arm-none-eabi-size   ASSIGNMENT_FINAL.elf 
+arm-none-eabi-objdump -h -S  ASSIGNMENT_FINAL.elf  > "ASSIGNMENT_FINAL.list"
+arm-none-eabi-objcopy  -O ihex  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.hex"
+arm-none-eabi-objcopy  -O binary  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.bin"
+   text	   data	    bss	    dec	    hex	filename
+  17352	    324	   3012	  20688	   50d0	ASSIGNMENT_FINAL.elf
+Finished building: default.size.stdout
+ 
+Finished building: ASSIGNMENT_FINAL.bin
+Finished building: ASSIGNMENT_FINAL.hex
+ 
+ 
+Finished building: ASSIGNMENT_FINAL.list
+ 
+16:14:46 **** Incremental Build of configuration Debug for project ASSIGNMENT_FINAL ****
+make -j8 all 
+arm-none-eabi-size   ASSIGNMENT_FINAL.elf 
+   text	   data	    bss	    dec	    hex	filename
+  17352	    324	   3012	  20688	   50d0	ASSIGNMENT_FINAL.elf
+Finished building: default.size.stdout
+ 
+16:19:39 **** Incremental Build of configuration Debug for project ASSIGNMENT_FINAL ****
+make -j8 all 
+arm-none-eabi-size   ASSIGNMENT_FINAL.elf 
+   text	   data	    bss	    dec	    hex	filename
+  17352	    324	   3012	  20688	   50d0	ASSIGNMENT_FINAL.elf
+Finished building: default.size.stdout
+ 
+16:22:36 **** Incremental Build of configuration Debug for project ASSIGNMENT_FINAL ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'send_data':
+../Core/Src/main.c:154:41: warning: '  #
+
+' directive writing 5 bytes into a region of size between 0 and 4 [-Wformat-overflow=]
+  154 |  HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp : %d, humi: %d, lux: %d  #\n\r",temp,humi,lux ), 1000);
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:154:41: note: 'sprintf' output between 32 and 62 bytes into a destination of size 30
+arm-none-eabi-gcc -o "ASSIGNMENT_FINAL.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\IOT2023\iot_2023\ASSIGNMENT_FINAL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ASSIGNMENT_FINAL.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ASSIGNMENT_FINAL.elf
+ 
+arm-none-eabi-size   ASSIGNMENT_FINAL.elf 
+arm-none-eabi-objdump -h -S  ASSIGNMENT_FINAL.elf  > "ASSIGNMENT_FINAL.list"
+arm-none-eabi-objcopy  -O ihex  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.hex"
+   text	   data	    bss	    dec	    hex	filename
+  17352	    324	   3012	  20688	   50d0	ASSIGNMENT_FINAL.elf
+arm-none-eabi-objcopy  -O binary  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.bin"
+Finished building: default.size.stdout
+ 
+Finished building: ASSIGNMENT_FINAL.bin
+Finished building: ASSIGNMENT_FINAL.hex
+ 
+ 
+Finished building: ASSIGNMENT_FINAL.list
+ 
+16:25:22 **** Incremental Build of configuration Debug for project ASSIGNMENT_FINAL ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'send_data':
+../Core/Src/main.c:154:41: warning: '  #
+
+' directive writing 5 bytes into a region of size between 0 and 4 [-Wformat-overflow=]
+  154 |  HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp : %d, humi: %d, lux: %d  #\n\r",temp,humi,lux ), 1000);
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:154:41: note: 'sprintf' output between 32 and 62 bytes into a destination of size 30
+arm-none-eabi-gcc -o "ASSIGNMENT_FINAL.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\IOT2023\iot_2023\ASSIGNMENT_FINAL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ASSIGNMENT_FINAL.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ASSIGNMENT_FINAL.elf
+ 
+arm-none-eabi-size   ASSIGNMENT_FINAL.elf 
+arm-none-eabi-objdump -h -S  ASSIGNMENT_FINAL.elf  > "ASSIGNMENT_FINAL.list"
+arm-none-eabi-objcopy  -O ihex  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.hex"
+   text	   data	    bss	    dec	    hex	filename
+  17360	    324	   3012	  20696	   50d8	ASSIGNMENT_FINAL.elf
+arm-none-eabi-objcopy  -O binary  ASSIGNMENT_FINAL.elf  "ASSIGNMENT_FINAL.bin"
+Finished building: default.size.stdout
+ 
+Finished building: ASSIGNMENT_FINAL.hex
+Finished building: ASSIGNMENT_FINAL.bin
+ 
+ 
+Finished building: ASSIGNMENT_FINAL.list
+ 

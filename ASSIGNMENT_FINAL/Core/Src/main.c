@@ -85,7 +85,8 @@ void Toogle_Led()
 }
 void Turn_On()
 {
-	HAL_GPIO_WritePin(GPIOA, LED_Pin, 1);
+	HAL_GPIO_WritePin(GPIOA, LED_Pin, 1);// confirm state
+
 //	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "HELLO\n\r"), 1000);
 }
 void Turn_Off()
@@ -113,22 +114,75 @@ void Print_Ack()
 }
 
 
-void send_data(int type, int data)
+#define MAX_ARRAY_DATA 20
+typedef struct
 {
-	char str[30];
-	switch (type){
-	case 0:
-		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp: %d#\n\r", data), 1000);
-		break;
-	case 1:
-		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Humi: %d#\n\r", data), 1000);
-		break;
-	case 2:
-		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Lux: %d#\n\r", data), 1000);
-		break;
-	}
+	uint32_t	ID;
+//	uint32_t 	Type;
+	uint32_t 	Temp;
+	uint32_t 	Humi;
+	uint32_t 	Lux;
+} DATA_ARRAY;
 
+DATA_ARRAY data_array[MAX_ARRAY_DATA];
+int current_index_array = 0;
+int current_ID = 0;
+
+int t=10;
+int h=15;
+int l=39;
+
+void read_data(){
+//	Print_HELLO();
+	if(current_index_array< MAX_ARRAY_DATA){
+		data_array[current_index_array].ID = current_ID;
+		current_ID++;
+		data_array[current_index_array].Temp = t;
+		data_array[current_index_array].Humi = h;
+		data_array[current_index_array].Lux = l;
+		current_index_array ++;
+	}
 }
+
+void send_data(){
+	char str[30];
+	int temp = data_array[0].Temp;
+	int humi = data_array[0].Humi;
+	int lux = data_array[0].Lux;
+	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp : %d, humi: %d, lux: %d  #\n\r",temp,humi,lux ), 1000);
+}
+
+
+void remove_data(){
+
+		   for( int i = 0; i < current_index_array - 1; i++)
+		   {
+			   data_array[i].ID = data_array[i+1].ID;
+			   data_array[i].Temp = data_array[i+1].Temp;
+			   data_array[i].Humi = data_array[i+1].Humi;
+			   data_array[i].Lux = data_array[i+1].Lux;
+		   }
+		   if(current_index_array>0) {
+			   current_index_array--;
+		   }
+}
+
+//void send_data(int type, int data)
+//{
+//	char str[30];
+//	switch (type){
+//	case 0:
+//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp: %d#\n\r", data), 1000);
+//		break;
+//	case 1:
+//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Humi: %d#\n\r", data), 1000);
+//		break;
+//	case 2:
+//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Lux: %d#\n\r", data), 1000);
+//		break;
+//	}
+//
+//}
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -211,7 +265,7 @@ int main(void)
 
   setTimer0(1);
   SCH_Add_Task(timerRun0, 15, 10);
-
+  SCH_Add_Task(read_data, 10, 500);
 //  SCH_Add_Task(Print_HELLO, 0, 5000);
 //  SCH_Add_Task(uart_communication_fsm,15,1);
 
@@ -225,6 +279,7 @@ int main(void)
 //			  Print_HELLO();
 			  cmd_parser_fsm();
 //			  index_buffer = 0;
+
 
 			  if (cmd_flag==1) {
 				  cmd_flag = 0;

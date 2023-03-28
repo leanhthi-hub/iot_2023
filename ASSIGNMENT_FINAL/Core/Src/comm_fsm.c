@@ -37,7 +37,8 @@ void uart_communication_fsm()
 	switch (comm_status)
 	{
 	case SEND:
-		send_data(typ, dat);
+//		send_data(typ, dat);
+		send_data();
 		setTimer0(500);
 		comm_status = WAIT;
 		break;
@@ -47,11 +48,10 @@ void uart_communication_fsm()
 		if(cmd_type == ACK)
 		{
 			Print_Ack();
-			typ++;
-			dat++;
-			if(typ==3)typ=0;//demo
+			remove_data();
 			comm_status = SEND;
 			cmd_type = UNDEFINE;
+
 		}
 		else if(timer0_flag==1){
 			comm_status = SEND;

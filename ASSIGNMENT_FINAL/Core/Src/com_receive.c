@@ -77,6 +77,7 @@ void cmd_parser_fsm()
 						cmd_flag = 1;
 						curr_par = 0;
 						pos = 0;
+						break;
 					}
 					else curr_par++;
 				}
@@ -100,12 +101,14 @@ void cmd_parser_fsm()
 						curr_par = 0;
 						cmd_flag = 1;
 						pos = 0;
+						break;
 					}
 					else curr_par++;
 				}
 				else if (curr_char == button_off_mess_cap[curr_par] || curr_char == button_off_mess_nocap[curr_par]){
 					cmd_type = BUTTON_OFF;
-					pos--;
+//					curr_par++;
+//					pos--;
 				}
 				else
 				{
@@ -125,6 +128,7 @@ void cmd_parser_fsm()
 						curr_par = 0;
 						cmd_flag = 1;
 						pos = 0;
+						break;
 					}
 					else curr_par++;
 				}
