@@ -1,0 +1,2 @@
+comm_fsm.c:15:6:uart_communiction_innit	4	static
+comm_fsm.c:21:6:uart_communication_fsm	8	static
