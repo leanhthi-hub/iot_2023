@@ -47,7 +47,7 @@ void uart_communication_fsm()
 
 		if(cmd_type == ACK)
 		{
-			Print_Ack();
+//			Print_Ack();
 			remove_data();
 			comm_status = SEND;
 			cmd_type = UNDEFINE;
