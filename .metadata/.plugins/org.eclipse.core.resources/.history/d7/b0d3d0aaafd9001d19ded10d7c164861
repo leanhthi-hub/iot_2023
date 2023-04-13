@@ -1,0 +1,34 @@
+/*
+ * global.h
+ *
+ *  Created on: Nov 2, 2022
+ *      Author: Leanhthi
+ */
+
+#ifndef INC_GLOBAL_H_
+#define INC_GLOBAL_H_
+
+
+
+
+
+extern int timer;//LED 1 TIME
+extern int timer2;//LED 2 TIME
+extern int timer3;//P TIME
+
+extern int status1;//LED 1
+extern int status2;//LED 2
+extern int status3;// MAIN MODE
+extern int status4;// P MODE
+
+extern int RED_TIME;
+extern int GREEN_TIME;
+extern int YELLOW_TIME;
+extern int TIME_OUT;
+
+extern int speaker;
+
+void Print_HELLO();
+
+
+#endif /* INC_GLOBAL_H_ */

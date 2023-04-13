@@ -1,0 +1,50 @@
+/*
+ * global.h
+ *
+ *  Created on: Nov 2, 2022
+ *      Author: Leanhthi
+ */
+
+#ifndef INC_GLOBAL_H_
+#define INC_GLOBAL_H_
+
+
+#include <main.h>
+
+
+extern int timer;//LED 1 TIME
+extern int timer2;//LED 2 TIME
+extern int timer3;//P TIME
+
+extern int status1;//LED 1
+extern int status2;//LED 2
+extern int status3;// MAIN MODE
+extern int status4;// P MODE
+
+extern int RED_TIME;
+extern int GREEN_TIME;
+extern int YELLOW_TIME;
+extern int TIME_OUT;
+
+extern int speaker;
+
+void Print_HELLO();
+
+
+#define MAX_ARRAY_DATA 20
+typedef struct
+{
+	uint32_t	ID;
+	uint32_t 	Temp;
+	uint32_t 	Humi;
+	uint32_t 	Lux;
+} DATA_ARRAY;
+
+extern DATA_ARRAY data_array[MAX_ARRAY_DATA];
+extern int current_index_array;
+extern int current_ID = 0;
+
+
+
+
+#endif /* INC_GLOBAL_H_ */

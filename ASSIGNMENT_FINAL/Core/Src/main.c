@@ -104,14 +104,7 @@ void Print_Ack()
 }
 
 
-#define MAX_ARRAY_DATA 20
-typedef struct
-{
-	uint32_t	ID;
-	uint32_t 	Temp;
-	uint32_t 	Humi;
-	uint32_t 	Lux;
-} DATA_ARRAY;
+
 
 DATA_ARRAY data_array[MAX_ARRAY_DATA];
 int current_index_array = 0;
