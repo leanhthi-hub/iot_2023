@@ -77,36 +77,30 @@ UART_HandleTypeDef huart2;
 void Toogle_Led()
 {
 	HAL_GPIO_TogglePin(GPIOA, LED_Pin);
-//	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "HELLO\n\r"), 1000);
 }
 void Turn_On()
 {
 	HAL_GPIO_WritePin(GPIOA, LED_Pin, 1);// confirm state
 
-//	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "HELLO\n\r"), 1000);
 }
 void Turn_Off()
 {
 	HAL_GPIO_WritePin(GPIOA, LED_Pin, 0);
-//	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "HELLO\n\r"), 1000);
 }
 void Print_HELLO()
 {
 	char str[30];
 	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "HELLO\n\r"), 1000);
-//	Toogle_Led();
 }
 void Print_Send()
 {
 	char str[30];
 	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "send success\n\r"), 1000);
-//	Toogle_Led();
 }
 void Print_Ack()
 {
 	char str[30];
 	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "received success  \n\r"), 1000);
-//	Toogle_Led();
 }
 
 
@@ -114,7 +108,6 @@ void Print_Ack()
 typedef struct
 {
 	uint32_t	ID;
-//	uint32_t 	Type;
 	uint32_t 	Temp;
 	uint32_t 	Humi;
 	uint32_t 	Lux;
@@ -124,18 +117,20 @@ DATA_ARRAY data_array[MAX_ARRAY_DATA];
 int current_index_array = 0;
 int current_ID = 0;
 
-int t=10;
-int h=15;
+int t=35;
+int h=30;
 int l=39;
 
 void read_data(){
-//	Print_HELLO();
 	if(current_index_array< MAX_ARRAY_DATA){
 		data_array[current_index_array].ID = current_ID;
 		current_ID++;
 		data_array[current_index_array].Temp = t;
+		t+=5;
 		data_array[current_index_array].Humi = h;
+		h+=6;
 		data_array[current_index_array].Lux = l;
+		l+=7;
 		current_index_array ++;
 	}
 }
@@ -163,22 +158,7 @@ void remove_data(){
 		   }
 }
 
-//void send_data(int type, int data)
-//{
-//	char str[30];
-//	switch (type){
-//	case 0:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp: %d#\n\r", data), 1000);
-//		break;
-//	case 1:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Humi: %d#\n\r", data), 1000);
-//		break;
-//	case 2:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Lux: %d#\n\r", data), 1000);
-//		break;
-//	}
-//
-//}
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -204,7 +184,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart->Instance == USART2)
 	{
 //		Print_HELLO();
-		HAL_UART_Transmit(&huart2, &temp, 1, 50);
+//		HAL_UART_Transmit(&huart2, &temp, 1, 50);
 		buffer[index_buffer++] = temp;
 		if(index_buffer == MAX_BUFFER_SIZE) index_buffer = 0;
 		buffer_flag = 1;
@@ -254,7 +234,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
 
-  Print_HELLO();
+  Print_HELLO(huart2);
   SCH_Init();
 
   HAL_UART_Receive_IT(&huart2, &temp, 1);
