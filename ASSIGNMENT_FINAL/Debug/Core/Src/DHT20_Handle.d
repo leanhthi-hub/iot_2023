@@ -1,5 +1,5 @@
-Core/Src/input_reading.o: ../Core/Src/input_reading.c \
- ../Core/Inc/input_reading.h ../Core/Inc/main.h \
+Core/Src/DHT20_Handle.o: ../Core/Src/DHT20_Handle.c \
+ ../Core/Inc/DHT20_Handle.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -26,7 +26,7 @@ Core/Src/input_reading.o: ../Core/Src/input_reading.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 
-../Core/Inc/input_reading.h:
+../Core/Inc/DHT20_Handle.h:
 
 ../Core/Inc/main.h:
 

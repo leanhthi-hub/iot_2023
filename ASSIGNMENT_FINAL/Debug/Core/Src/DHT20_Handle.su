@@ -1,0 +1,3 @@
+DHT20_Handle.c:18:6:read_data	4	static
+DHT20_Handle.c:33:7:make_data	64	static
+DHT20_Handle.c:44:6:remove_data	16	static

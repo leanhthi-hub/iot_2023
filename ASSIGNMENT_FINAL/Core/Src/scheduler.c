@@ -28,7 +28,6 @@ void SCH_Add_Task ( void (*pFunction)() , uint32_t DELAY, uint32_t PERIOD)
 		current_index_task++;
 //		return current_index_task-1;
 	}
-//	return -1;
 }
 
 void SCH_Update(void)

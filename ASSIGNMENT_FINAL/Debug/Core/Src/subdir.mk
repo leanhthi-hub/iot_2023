@@ -5,11 +5,11 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Src/DHT20_Handle.c \
 ../Core/Src/com_receive.c \
 ../Core/Src/comm_fsm.c \
 ../Core/Src/fsm.c \
 ../Core/Src/global.c \
-../Core/Src/input_reading.c \
 ../Core/Src/main.c \
 ../Core/Src/scheduler.c \
 ../Core/Src/stm32f1xx_hal_msp.c \
@@ -20,11 +20,11 @@ C_SRCS += \
 ../Core/Src/timer.c 
 
 OBJS += \
+./Core/Src/DHT20_Handle.o \
 ./Core/Src/com_receive.o \
 ./Core/Src/comm_fsm.o \
 ./Core/Src/fsm.o \
 ./Core/Src/global.o \
-./Core/Src/input_reading.o \
 ./Core/Src/main.o \
 ./Core/Src/scheduler.o \
 ./Core/Src/stm32f1xx_hal_msp.o \
@@ -35,11 +35,11 @@ OBJS += \
 ./Core/Src/timer.o 
 
 C_DEPS += \
+./Core/Src/DHT20_Handle.d \
 ./Core/Src/com_receive.d \
 ./Core/Src/comm_fsm.d \
 ./Core/Src/fsm.d \
 ./Core/Src/global.d \
-./Core/Src/input_reading.d \
 ./Core/Src/main.d \
 ./Core/Src/scheduler.d \
 ./Core/Src/stm32f1xx_hal_msp.d \

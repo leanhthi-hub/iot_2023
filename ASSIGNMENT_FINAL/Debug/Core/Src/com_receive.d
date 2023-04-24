@@ -1,5 +1,5 @@
 Core/Src/com_receive.o: ../Core/Src/com_receive.c \
- ../Core/Inc/com_receive.h ../Core/Inc/main.h \
+ ../Core/Inc/com_handle.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -26,7 +26,7 @@ Core/Src/com_receive.o: ../Core/Src/com_receive.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 
-../Core/Inc/com_receive.h:
+../Core/Inc/com_handle.h:
 
 ../Core/Inc/main.h:
 

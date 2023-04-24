@@ -24,11 +24,10 @@
 /* USER CODE BEGIN Includes */
 #include "scheduler.h"
 #include "global.h"
-//#include "input_reading.h"
 #include "timer.h"
-//#include "fsm.h"
+#include "DHT20_Handle.h"
 #include <stdio.h>
-#include <com_receive.h>
+#include "com_handle.h"
 
 
 /* USER CODE END Includes */
@@ -56,6 +55,7 @@
 //	HAL_UART_Transmit (& huart2 , ( void *) str , sprintf ( str , "#ADC=%ld!\n\r",ADC_value) , 1000) ;
 //
 //}
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -64,15 +64,13 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+/* Please create new tasks here, using our existing method*/
 
 void Toogle_Led()
 {
@@ -110,75 +108,18 @@ void Print_Ack()
 }
 
 
-#define MAX_ARRAY_DATA 20
-typedef struct
+void Print(char* temp)
 {
-	uint32_t	ID;
-//	uint32_t 	Type;
-	uint32_t 	Temp;
-	uint32_t 	Humi;
-	uint32_t 	Lux;
-} DATA_ARRAY;
-
-DATA_ARRAY data_array[MAX_ARRAY_DATA];
-int current_index_array = 0;
-int current_ID = 0;
-
-int t=10;
-int h=15;
-int l=39;
-
-void read_data(){
-//	Print_HELLO();
-	if(current_index_array< MAX_ARRAY_DATA){
-		data_array[current_index_array].ID = current_ID;
-		current_ID++;
-		data_array[current_index_array].Temp = t;
-		data_array[current_index_array].Humi = h;
-		data_array[current_index_array].Lux = l;
-		current_index_array ++;
-	}
-}
-
-void send_data(){
 	char str[30];
-	int temp = data_array[0].Temp;
-	int humi = data_array[0].Humi;
-	int lux = data_array[0].Lux;
-	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp:%d,humi:%d,lux:%d#\n\r",temp,humi,lux ), 1000);
+	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "The string is: %s\n\r", temp), 1000);
+}
+void send_data(char* sensorValues){
+	char str[30];
+	sensorValues = make_data();
+	HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "%s", sensorValues), 1000);
 }
 
 
-void remove_data(){
-
-		   for( int i = 0; i < current_index_array - 1; i++)
-		   {
-			   data_array[i].ID = data_array[i+1].ID;
-			   data_array[i].Temp = data_array[i+1].Temp;
-			   data_array[i].Humi = data_array[i+1].Humi;
-			   data_array[i].Lux = data_array[i+1].Lux;
-		   }
-		   if(current_index_array>0) {
-			   current_index_array--;
-		   }
-}
-
-//void send_data(int type, int data)
-//{
-//	char str[30];
-//	switch (type){
-//	case 0:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!temp: %d#\n\r", data), 1000);
-//		break;
-//	case 1:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Humi: %d#\n\r", data), 1000);
-//		break;
-//	case 2:
-//		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!Lux: %d#\n\r", data), 1000);
-//		break;
-//	}
-//
-//}
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -187,7 +128,6 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -199,15 +139,22 @@ uint8_t buffer[MAX_BUFFER_SIZE];
 uint8_t index_buffer = 0;
 uint8_t buffer_flag = 0;
 
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 	if(huart->Instance == USART2)
 	{
-//		Print_HELLO();
 		HAL_UART_Transmit(&huart2, &temp, 1, 50);
-		buffer[index_buffer++] = temp;
-		if(index_buffer == MAX_BUFFER_SIZE) index_buffer = 0;
-		buffer_flag = 1;
+		if(temp != '#')
+		{
+			buffer[index_buffer++] = temp;
+		}
+		else
+		{
+			cmd_parser();
+			memset(buffer, 0, sizeof(buffer));
+			index_buffer = 0;
+		}
 		HAL_UART_Receive_IT(&huart2, &temp, 1);
 	}
 }
@@ -244,7 +191,6 @@ int main(void)
   MX_TIM2_Init();
   MX_USART2_UART_Init();
   MX_TIM3_Init();
-  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 //  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_Base_Start_IT (& htim2);
@@ -270,25 +216,7 @@ int main(void)
   while (1)
   {
 	  SCH_Dispatch_Tasks();
-
-
-		  if(buffer_flag == 1)
-		  {
-//			  Print_HELLO();
-			  cmd_parser_fsm();
-//			  index_buffer = 0;
-
-
-			  if (cmd_flag==1) {
-				  cmd_flag = 0;
-				  buffer_flag = 0;
-				  index_buffer = 0;
-			  }
-		  }
-
 	  uart_communication_fsm() ;
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -304,7 +232,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -330,57 +257,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
-/**
-  * @brief ADC1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_ADC1_Init(void)
-{
-
-  /* USER CODE BEGIN ADC1_Init 0 */
-
-  /* USER CODE END ADC1_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC1_Init 1 */
-
-  /* USER CODE END ADC1_Init 1 */
-  /** Common config
-  */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_1;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
-
 }
 
 /**
@@ -442,6 +318,7 @@ static void MX_TIM3_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
@@ -461,15 +338,28 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN TIM3_Init 2 */
 
   /* USER CODE END TIM3_Init 2 */
+  HAL_TIM_MspPostInit(&htim3);
 
 }
 
@@ -517,16 +407,59 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_Pin|ledpb_Pin|led1a_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : LED_Pin */
-  GPIO_InitStruct.Pin = LED_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, ledpa_Pin|led1b_Pin|led2b_Pin|led2a_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : button_p_Pin button_1_Pin */
+  GPIO_InitStruct.Pin = button_p_Pin|button_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : button_2_Pin */
+  GPIO_InitStruct.Pin = button_2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(button_2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED_Pin ledpb_Pin */
+  GPIO_InitStruct.Pin = LED_Pin|ledpb_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : button_3_Pin */
+  GPIO_InitStruct.Pin = button_3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(button_3_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ledpa_Pin led2b_Pin led2a_Pin */
+  GPIO_InitStruct.Pin = ledpa_Pin|led2b_Pin|led2a_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : led1a_Pin */
+  GPIO_InitStruct.Pin = led1a_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(led1a_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : led1b_Pin */
+  GPIO_InitStruct.Pin = led1b_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(led1b_GPIO_Port, &GPIO_InitStruct);
 
 }
 
