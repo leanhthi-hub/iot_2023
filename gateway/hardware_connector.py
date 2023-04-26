@@ -37,6 +37,7 @@ def processData(client, data: str):
             val[devName] = devPayload
             publishData(client, devName, devPayload)
     sendSerial("!ACK#")
+    sendSerial("!REQ#")
     if newPacket:
         sleep(30)
 
@@ -53,6 +54,7 @@ def publishData(client, devName: str, devPayload: str):
 
 
 def readSerial(client):
+    
     bytesToRead = ser.inWaiting()
     if (bytesToRead > 0):
         global mess
@@ -66,6 +68,7 @@ def readSerial(client):
                 mess = ""
             else:
                 mess = mess[end + 1:]
+     
 
 
 
